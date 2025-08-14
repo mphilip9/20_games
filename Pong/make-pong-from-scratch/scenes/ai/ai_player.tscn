@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://bur1dmru5dm25"]
+
+[ext_resource type="Texture2D" uid="uid://c2wvex1bkcx4r" path="res://assets/white-bar.png" id="2_q4j2l"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dovo2"]
+size = Vector2(3.25, 48)
+
+[node name="AIPlayer" type="CharacterBody2D"]
+scale = Vector2(4, 4)
+collision_layer = 4
+collision_mask = 4
+
+[node name="AICollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0.25)
+shape = SubResource("RectangleShape2D_dovo2")
+
+[node name="AISprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_q4j2l")

@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://c6d82fdcuqcvf"]
+
+[ext_resource type="Script" uid="uid://cbdimdpipuilj" path="res://scenes/ball/ball.gd" id="1_nv6q1"]
+[ext_resource type="Texture2D" uid="uid://bipabdk3erv2b" path="res://assets/ball.png" id="1_oqv3d"]
+[ext_resource type="AudioStream" uid="uid://xwqbrggw27dv" path="res://assets/paddle.mp3" id="3_stoaj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_oqv3d"]
+radius = 19.0263
+
+[node name="Ball" type="CharacterBody2D"]
+scale = Vector2(0.5, 0.5)
+collision_mask = 4
+script = ExtResource("1_nv6q1")
+
+[node name="BallSprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_oqv3d")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("CircleShape2D_oqv3d")
+
+[node name="Paddle" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_stoaj")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

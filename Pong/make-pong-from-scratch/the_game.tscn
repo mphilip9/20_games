@@ -1,3 +1,191 @@
-[gd_scene format=3 uid="uid://d25eo1cjjt383"]
+[gd_scene load_steps=11 format=3 uid="uid://d25eo1cjjt383"]
+
+[ext_resource type="Texture2D" uid="uid://dtsjs221w0hsk" path="res://assets/black-background-1436871947tVz.jpg" id="1_bxlh1"]
+[ext_resource type="Script" uid="uid://bldiuja3v8ww7" path="res://the_game.gd" id="1_rwqnc"]
+[ext_resource type="PackedScene" uid="uid://d1nreshjc5lqb" path="res://scenes/player/player.tscn" id="2_sbril"]
+[ext_resource type="Script" uid="uid://etr8qf37bmhw" path="res://canvas_layer.gd" id="3_o5p78"]
+[ext_resource type="PackedScene" uid="uid://d26mux6hn5x02" path="res://scenes/ai/player_2.tscn" id="5_o5p78"]
+[ext_resource type="AudioStream" uid="uid://c6iq5hkc4qrts" path="res://assets/SynthChime7.mp3" id="6_wg70j"]
+[ext_resource type="AudioStream" uid="uid://bataarli8rldr" path="res://assets/kenney_music-jingles/Audio/8-Bit jingles/jingles_NES04.ogg" id="7_82yl5"]
+[ext_resource type="AudioStream" uid="uid://cxah0vfwc75to" path="res://assets/kenney_music-jingles/Audio/8-Bit jingles/jingles_NES00.ogg" id="7_ep5gg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sbril"]
+size = Vector2(23, 646.75)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_sbril"]
+a = Vector2(1147, 1)
+b = Vector2(4, 2)
 
 [node name="The Game" type="Node2D"]
+script = ExtResource("1_rwqnc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(575.75, 324.25)
+scale = Vector2(1.86423, 1.86522)
+texture = ExtResource("1_bxlh1")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+process_mode = 3
+script = ExtResource("3_o5p78")
+
+[node name="UI" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 8
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/UI"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -12.0
+offset_right = 12.0
+offset_bottom = 23.0
+grow_horizontal = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/UI/MarginContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/UI/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 40
+
+[node name="Player2Container" type="PanelContainer" parent="CanvasLayer/UI/MarginContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Player2Score" type="Label" parent="CanvasLayer/UI/MarginContainer/HBoxContainer/MarginContainer/Player2Container"]
+layout_mode = 2
+text = "0"
+
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/UI/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="Player1Container" type="PanelContainer" parent="CanvasLayer/UI/MarginContainer/HBoxContainer/MarginContainer2"]
+layout_mode = 2
+
+[node name="Player1Score" type="Label" parent="CanvasLayer/UI/MarginContainer/HBoxContainer/MarginContainer2/Player1Container"]
+layout_mode = 2
+text = "0"
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/UI"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -5.0
+offset_right = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Game Over" type="Label" parent="CanvasLayer/UI"]
+visible = false
+layout_mode = 0
+offset_left = 396.0
+offset_top = 93.0
+offset_right = 721.0
+offset_bottom = 176.0
+theme_override_colors/font_color = Color(0.862745, 0, 0, 1)
+theme_override_font_sizes/font_size = 60
+text = "Game Over"
+
+[node name="Pause Menu" type="MarginContainer" parent="CanvasLayer/UI"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Restart" type="Button" parent="CanvasLayer/UI/Pause Menu"]
+layout_mode = 2
+text = "Restart"
+
+[node name="Start Button" type="Button" parent="CanvasLayer/UI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 4.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Start Game"
+
+[node name="Player" parent="." instance=ExtResource("2_sbril")]
+position = Vector2(1112, 313)
+scale = Vector2(3, 3)
+
+[node name="Goal" type="Area2D" parent="."]
+collision_mask = 5
+
+[node name="GoalShape" type="CollisionShape2D" parent="Goal"]
+position = Vector2(-9, 323)
+shape = SubResource("RectangleShape2D_sbril")
+
+[node name="Goal2" type="Area2D" parent="."]
+collision_mask = 5
+
+[node name="GoalShape" type="CollisionShape2D" parent="Goal2"]
+position = Vector2(1162, 324)
+shape = SubResource("RectangleShape2D_sbril")
+
+[node name="Boundary" type="StaticBody2D" parent="."]
+collision_layer = 4
+collision_mask = 4
+
+[node name="BoundaryShape" type="CollisionShape2D" parent="Boundary"]
+shape = SubResource("SegmentShape2D_sbril")
+
+[node name="Boundary2" type="StaticBody2D" parent="."]
+collision_layer = 4
+collision_mask = 4
+
+[node name="BoundaryShape" type="CollisionShape2D" parent="Boundary2"]
+position = Vector2(-1, 645)
+shape = SubResource("SegmentShape2D_sbril")
+
+[node name="Player2" parent="." instance=ExtResource("5_o5p78")]
+modulate = Color(0.407843, 1, 1, 1)
+position = Vector2(41, 124)
+scale = Vector2(3, 3)
+
+[node name="Node" type="Node" parent="."]
+process_mode = 3
+
+[node name="Score" type="AudioStreamPlayer2D" parent="Node"]
+stream = ExtResource("6_wg70j")
+
+[node name="Paddle" type="AudioStreamPlayer2D" parent="Node"]
+
+[node name="Start" type="AudioStreamPlayer2D" parent="Node"]
+stream = ExtResource("7_82yl5")
+
+[node name="GameOver" type="AudioStreamPlayer2D" parent="Node"]
+stream = ExtResource("7_ep5gg")
+
+[connection signal="pressed" from="CanvasLayer/UI/Pause Menu/Restart" to="." method="_on_restart_pressed"]
+[connection signal="pressed" from="CanvasLayer/UI/Start Button" to="." method="_on_start_button_pressed"]
+[connection signal="area_entered" from="Goal" to="." method="_on_goal_area_entered"]
+[connection signal="body_entered" from="Goal" to="." method="_on_goal_body_entered"]
+[connection signal="area_entered" from="Goal2" to="." method="_on_goal_2_area_entered"]
+[connection signal="body_entered" from="Goal2" to="." method="_on_goal_2_body_entered"]

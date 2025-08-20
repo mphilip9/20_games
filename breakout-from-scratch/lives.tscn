@@ -1,0 +1,26 @@
+[gd_scene load_steps=2 format=3 uid="uid://duhj8w2orrae7"]
+
+[ext_resource type="Texture2D" uid="uid://5jjdrqkaqcd2" path="res://assets/ball.png" id="1_40ilm"]
+
+[node name="Lives" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="Life1" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("1_40ilm")
+expand_mode = 3
+
+[node name="Life2" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("1_40ilm")
+expand_mode = 3
+
+[node name="Life3" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("1_40ilm")
+expand_mode = 3

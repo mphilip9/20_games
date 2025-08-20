@@ -1,0 +1,200 @@
+[gd_scene load_steps=15 format=3 uid="uid://bjba28g8a8x3f"]
+
+[ext_resource type="PackedScene" uid="uid://0qvdqsdbwar6" path="res://scenes/paddle.tscn" id="1_80nbo"]
+[ext_resource type="Script" uid="uid://bfq10pykjfm8p" path="res://game.gd" id="1_feb5d"]
+[ext_resource type="PackedScene" uid="uid://cg54cgmomxqdk" path="res://scenes/ball.tscn" id="2_e2o6t"]
+[ext_resource type="PackedScene" uid="uid://duhj8w2orrae7" path="res://lives.tscn" id="4_fc0e3"]
+[ext_resource type="PackedScene" uid="uid://ck7iomol4uvcl" path="res://scenes/brick.tscn" id="5_7jktm"]
+[ext_resource type="Script" uid="uid://ts4dit5kk5mt" path="res://game_manager.gd" id="6_ryrav"]
+[ext_resource type="AudioStream" uid="uid://cd3n68b7uajm7" path="res://sounds/kenney_impact-sounds/Audio/impactBell_heavy_001.ogg" id="7_eow3j"]
+[ext_resource type="AudioStream" uid="uid://cws41lftqql1q" path="res://sounds/Pixel-Balloons_v1.mp3" id="8_vef74"]
+[ext_resource type="AudioStream" uid="uid://c8yhm5g2vqubs" path="res://sounds/Pixel-Balloons_v2.mp3" id="9_hve3p"]
+[ext_resource type="AudioStream" uid="uid://dd4gcshohua4f" path="res://sounds/PowerDown15.mp3" id="10_hve3p"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mwb40"]
+size = Vector2(42.75, 688.812)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_80nbo"]
+size = Vector2(1249, 51)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fc0e3"]
+size = Vector2(1362, 20)
+
+[sub_resource type="AudioStreamPlaylist" id="AudioStreamPlaylist_mfdv2"]
+shuffle = true
+stream_count = 2
+stream_0 = ExtResource("8_vef74")
+stream_1 = ExtResource("9_hve3p")
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_feb5d")
+brick_scene = ExtResource("5_7jktm")
+
+[node name="Background" type="ColorRect" parent="."]
+modulate = Color(0.0846899, 0.0846899, 0.0846899, 1)
+offset_right = 1003.0
+offset_bottom = 701.0
+
+[node name="Wall" type="StaticBody2D" parent="."]
+position = Vector2(-30, 34)
+collision_layer = 8
+collision_mask = 2
+
+[node name="WallShape" type="CollisionShape2D" parent="Wall"]
+position = Vector2(9.25, 318.312)
+shape = SubResource("RectangleShape2D_mwb40")
+
+[node name="Wall2" type="StaticBody2D" parent="."]
+position = Vector2(1043, 18)
+collision_layer = 8
+collision_mask = 2
+
+[node name="WallShape" type="CollisionShape2D" parent="Wall2"]
+position = Vector2(-21.625, 336.594)
+shape = SubResource("RectangleShape2D_mwb40")
+
+[node name="Ceiling" type="StaticBody2D" parent="."]
+position = Vector2(28, -41)
+collision_layer = 8
+collision_mask = 2
+
+[node name="CeilingShape" type="CollisionShape2D" parent="Ceiling"]
+position = Vector2(528.5, 15)
+shape = SubResource("RectangleShape2D_80nbo")
+
+[node name="Goal" type="Area2D" parent="."]
+position = Vector2(10, 710)
+collision_layer = 4
+collision_mask = 2
+
+[node name="GoalShape" type="CollisionShape2D" parent="Goal"]
+modulate = Color(1, 0.541176, 1, 1)
+position = Vector2(435, 0)
+shape = SubResource("RectangleShape2D_fc0e3")
+
+[node name="CeilingGoal" type="Area2D" parent="."]
+position = Vector2(21, -6)
+collision_layer = 4
+collision_mask = 2
+
+[node name="CeilingShape" type="CollisionShape2D" parent="CeilingGoal"]
+modulate = Color(1, 0.541176, 1, 1)
+position = Vector2(435, 0)
+shape = SubResource("RectangleShape2D_fc0e3")
+
+[node name="Paddle" parent="." instance=ExtResource("1_80nbo")]
+position = Vector2(442, 667)
+collision_layer = 8
+collision_mask = 8
+
+[node name="Ball" parent="." instance=ExtResource("2_e2o6t")]
+position = Vector2(495, 634)
+collision_layer = 6
+collision_mask = 8
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Start Menu" type="MarginContainer" parent="UI/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StartButton" type="Label" parent="UI/Control/Start Menu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Press Space to Start"
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/Control"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="StatsBox" type="HBoxContainer" parent="UI/Control/MarginContainer"]
+layout_mode = 2
+
+[node name="Lives2" parent="UI/Control/MarginContainer/StatsBox" instance=ExtResource("4_fc0e3")]
+layout_mode = 2
+
+[node name="Score" type="Label" parent="UI/Control/MarginContainer/StatsBox"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_font_sizes/font_size = 30
+text = "0"
+
+[node name="Mute" type="Label" parent="UI/Control/MarginContainer/StatsBox"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Mute Coming Soon"
+
+[node name="GameOverContainer" type="VBoxContainer" parent="UI/Control"]
+process_mode = 2
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -115.0
+offset_top = -61.0
+offset_right = 115.0
+offset_bottom = 61.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GameOver" type="Label" parent="UI/Control/GameOverContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "GAME OVER"
+uppercase = true
+
+[node name="RestartButton" type="Button" parent="UI/Control/GameOverContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Restart"
+
+[node name="GameManager" type="Node" parent="."]
+script = ExtResource("6_ryrav")
+
+[node name="Sounds" type="Node" parent="."]
+process_mode = 3
+
+[node name="NextLevel" type="AudioStreamPlayer2D" parent="Sounds"]
+stream = ExtResource("7_eow3j")
+
+[node name="Music" type="AudioStreamPlayer2D" parent="Sounds"]
+stream = SubResource("AudioStreamPlaylist_mfdv2")
+autoplay = true
+
+[node name="QuitSound" type="AudioStreamPlayer2D" parent="Sounds"]
+process_mode = 3
+stream = ExtResource("10_hve3p")
+
+[connection signal="body_entered" from="Goal" to="." method="_on_goal_body_entered"]
+[connection signal="body_entered" from="CeilingGoal" to="." method="_on_ceiling_goal_body_entered"]
+[connection signal="pressed" from="UI/Control/GameOverContainer/RestartButton" to="." method="_on_restart_button_pressed"]
+
+[editable path="UI/Control/MarginContainer/StatsBox/Lives2"]

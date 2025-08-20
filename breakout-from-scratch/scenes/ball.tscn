@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://cg54cgmomxqdk"]
+
+[ext_resource type="Texture2D" uid="uid://5jjdrqkaqcd2" path="res://assets/ball.png" id="1_7s4qf"]
+[ext_resource type="Script" uid="uid://cj41d6mu3dw0d" path="res://scenes/ball.gd" id="1_cxlvu"]
+[ext_resource type="AudioStream" uid="uid://ckp524vsq746k" path="res://sounds/kenney_impact-sounds/Audio/footstep_concrete_000.ogg" id="3_f7cbr"]
+[ext_resource type="AudioStream" uid="uid://hiawfgmrdj6d" path="res://sounds/kenney_impact-sounds/Audio/impactGeneric_light_001.ogg" id="4_4dx81"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_n1dj2"]
+radius = 18.9737
+
+[node name="Ball" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_cxlvu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_n1dj2")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 0.690196, 1)
+texture = ExtResource("1_7s4qf")
+
+[node name="BrickHitSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_f7cbr")
+
+[node name="PaddleHit" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_4dx81")

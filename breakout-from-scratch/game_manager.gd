@@ -22,4 +22,5 @@ func next_level():
 func reset_game():
 	bricks_hit = 0
 	ceiling_hit = false
+	current_level = 0
 	score = 0

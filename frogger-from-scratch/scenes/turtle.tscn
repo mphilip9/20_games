@@ -1,0 +1,150 @@
+[gd_scene load_steps=9 format=3 uid="uid://dvthisuc8ec4c"]
+
+[ext_resource type="Script" uid="uid://b5s3odo35l4r2" path="res://scenes/turtle.gd" id="1_1l2iw"]
+[ext_resource type="Texture2D" uid="uid://b0ridfyp7clau" path="res://assets/turtle_animation.png" id="2_1l2iw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hbk6c"]
+size = Vector2(46, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1l2iw"]
+size = Vector2(26.375, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7kcg0"]
+size = Vector2(11, 12)
+
+[sub_resource type="Animation" id="Animation_1l2iw"]
+resource_name = "diving_turtle"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TurtleSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.16667, 2.33333, 3.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TurtleShape:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.66667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TurtleShape2:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.66667, 3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [true, false, true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("TurtleShape3:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 3, 4.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [true, false, true]
+}
+
+[sub_resource type="Animation" id="Animation_hbk6c"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TurtleSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TurtleShape:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TurtleShape2:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("TurtleShape3:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7kcg0"]
+_data = {
+&"RESET": SubResource("Animation_hbk6c"),
+&"diving_turtle": SubResource("Animation_1l2iw")
+}
+
+[node name="Turtle" type="AnimatableBody2D"]
+script = ExtResource("1_1l2iw")
+
+[node name="TurtleSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_1l2iw")
+flip_h = true
+hframes = 4
+
+[node name="TurtleShape" type="CollisionShape2D" parent="."]
+unique_name_in_owner = true
+shape = SubResource("RectangleShape2D_hbk6c")
+
+[node name="TurtleShape2" type="CollisionShape2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-10.1875, 0)
+shape = SubResource("RectangleShape2D_1l2iw")
+
+[node name="TurtleShape3" type="CollisionShape2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-17.5, -0.5)
+shape = SubResource("RectangleShape2D_7kcg0")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_7kcg0")
+}

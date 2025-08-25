@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://uk21ixo1o870"]
+
+[ext_resource type="Script" uid="uid://dccrv74ru84i3" path="res://scenes/log.gd" id="1_pt1ea"]
+[ext_resource type="Texture2D" uid="uid://c1t571bufq5tl" path="res://assets/3_frame_log.png" id="1_spugk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gvwyr"]
+size = Vector2(44.5, 11)
+
+[node name="Log" type="AnimatableBody2D"]
+z_index = 2
+y_sort_enabled = true
+constant_linear_velocity = Vector2(10, 0)
+script = ExtResource("1_pt1ea")
+
+[node name="LogCollision" type="CollisionShape2D" parent="."]
+position = Vector2(-0.25, -0.5)
+shape = SubResource("RectangleShape2D_gvwyr")
+
+[node name="LogSprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_spugk")

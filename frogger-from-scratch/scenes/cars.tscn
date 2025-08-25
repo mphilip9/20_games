@@ -1,0 +1,24 @@
+[gd_scene load_steps=9 format=3 uid="uid://b21mhbvq56lkm"]
+
+[ext_resource type="Texture2D" uid="uid://yyhjg7kacpp4" path="res://assets/kenney_tiny-battle (1)/Tiles/tile_0131.png" id="1_eyisg"]
+[ext_resource type="Script" uid="uid://bll13bj48o3pq" path="res://scenes/cars.gd" id="1_gxdjb"]
+[ext_resource type="Texture2D" uid="uid://dbqiod6j3b5ma" path="res://assets/kenney_tiny-battle (1)/Tiles/tile_0114.png" id="2_dqukq"]
+[ext_resource type="Texture2D" uid="uid://5ad6ckh7we8m" path="res://assets/kenney_tiny-battle (1)/Tiles/tile_0097.png" id="3_icfj2"]
+[ext_resource type="Texture2D" uid="uid://c5kj50d5siv6p" path="res://assets/kenney_tiny-battle (1)/Tiles/tile_0149.png" id="4_3qx8y"]
+[ext_resource type="Texture2D" uid="uid://co80hgbapj1tb" path="res://assets/kenney_tiny-battle (1)/Tiles/tile_0168.png" id="6_0powi"]
+[ext_resource type="Texture2D" uid="uid://2wu88bidggts" path="res://assets/kenney_tiny-battle (1)/Tiles/tile_0167.png" id="7_a2kor"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eyisg"]
+size = Vector2(12.5, 12)
+
+[node name="Cars" type="CharacterBody2D" groups=["car"]]
+script = ExtResource("1_gxdjb")
+car_textures = Array[Texture2D]([ExtResource("2_dqukq"), ExtResource("3_icfj2"), ExtResource("4_3qx8y"), ExtResource("1_eyisg"), ExtResource("6_0powi"), ExtResource("7_a2kor")])
+
+[node name="CarSprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_eyisg")
+flip_h = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.25, 1)
+shape = SubResource("RectangleShape2D_eyisg")

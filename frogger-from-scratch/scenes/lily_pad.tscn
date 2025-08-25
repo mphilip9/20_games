@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://cnwoae0n0xk36"]
+
+[ext_resource type="Texture2D" uid="uid://b8xknbtjjngsi" path="res://assets/lilypad.png" id="1_mjfoc"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3r7wr"]
+radius = 7.0
+
+[node name="LilyPad" type="Sprite2D" groups=["lilypad"]]
+texture = ExtResource("1_mjfoc")
+
+[node name="LilyArea" type="Area2D" parent="." groups=["lilypad"]]
+collision_layer = 7
+collision_mask = 7
+
+[node name="LilyShape" type="CollisionShape2D" parent="LilyArea"]
+shape = SubResource("CircleShape2D_3r7wr")

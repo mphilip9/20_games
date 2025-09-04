@@ -1,0 +1,11 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://o2x3ngb53j02"]
+
+[ext_resource type="FontFile" uid="uid://dik3esro1a7ht" path="res://themes/Press_Start_2P,Rubik_Spray_Paint/Rubik_Spray_Paint/RubikSprayPaint-Regular.ttf" id="1_s1hyc"]
+
+[resource]
+default_font = ExtResource("1_s1hyc")
+default_font_size = 20
+Button/colors/font_color = Color(0.0705882, 0.494118, 0.690196, 1)
+Label/colors/font_color = Color(0.0686631, 0.494636, 0.690143, 1)
+Label/colors/font_outline_color = Color(0.620356, 0.168899, 0.173691, 1)
+Label/colors/font_shadow_color = Color(0.647059, 0.203922, 0.145098, 0.631373)

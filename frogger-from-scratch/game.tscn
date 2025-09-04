@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=4 uid="uid://ckoht4qkxdt0j"]
+[gd_scene load_steps=19 format=4 uid="uid://ckoht4qkxdt0j"]
 
 [ext_resource type="Texture2D" uid="uid://c20nwcccdn2u6" path="res://assets/kenney_tiny-battle (1)/Tilemap/tilemap_packed.png" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://x0amttthh0ke" path="res://game.gd" id="1_fc0e3"]
@@ -6,6 +6,9 @@
 [ext_resource type="Script" uid="uid://bdh5seuwbcxgf" path="res://markers.gd" id="5_7jktm"]
 [ext_resource type="Script" uid="uid://c44w3jgykvb8i" path="res://game_manager.gd" id="5_ryrav"]
 [ext_resource type="Script" uid="uid://ckshxko1kxoys" path="res://ui.gd" id="6_ryrav"]
+[ext_resource type="AudioStream" uid="uid://ce2j1jwpyxsni" path="res://sounds/kenney_music-jingles/Audio/Steel jingles/jingles_STEEL02.ogg" id="7_eow3j"]
+[ext_resource type="Texture2D" uid="uid://qegmsdaf40ae" path="res://assets/frog_spritesheets/frog_green_spritesheet.png" id="7_j5wjh"]
+[ext_resource type="Theme" uid="uid://o2x3ngb53j02" path="res://themes/new_theme.tres" id="7_vef74"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e2o6t"]
 texture = ExtResource("1_80nbo")
@@ -271,7 +274,48 @@ size = Vector2(66, 281)
 size = Vector2(29, 266)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eow3j"]
-size = Vector2(496, 106)
+size = Vector2(496, 98)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vef74"]
+atlas = ExtResource("7_j5wjh")
+region = Rect2(0, 0, 32.5, 32.25)
+
+[sub_resource type="Animation" id="Animation_vef74"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("UI/LevelContainer:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_j5wjh"]
+resource_name = "Level"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("UI/LevelContainer:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0333333, 1.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hve3p"]
+_data = {
+&"RESET": SubResource("Animation_vef74"),
+&"level": SubResource("Animation_j5wjh")
+}
 
 [node name="Game" type="Node2D"]
 y_sort_enabled = true
@@ -367,13 +411,14 @@ collision_priority = 3.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KillWaterArea"]
 modulate = Color(0.757766, 0.578151, 1.92523e-07, 1)
-position = Vector2(248, 59)
+position = Vector2(248, 55)
 shape = SubResource("RectangleShape2D_eow3j")
 
 [node name="GameManager" type="Node" parent="."]
 script = ExtResource("5_ryrav")
 
 [node name="UI" type="CanvasLayer" parent="."]
+process_mode = 3
 script = ExtResource("6_ryrav")
 
 [node name="MarginContainer" type="MarginContainer" parent="UI"]
@@ -383,29 +428,141 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
+theme = ExtResource("7_vef74")
 theme_override_constants/margin_left = 10
-theme_override_constants/margin_right = 10
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/MarginContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+theme_override_constants/separation = 80
 
-[node name="PanelContainer" type="PanelContainer" parent="UI/MarginContainer/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="Lives" type="Label" parent="UI/MarginContainer/HBoxContainer/PanelContainer"]
+[node name="Life1" type="TextureRect" parent="UI/MarginContainer/HBoxContainer/HBoxContainer"]
 layout_mode = 2
-text = "0"
+texture = SubResource("AtlasTexture_vef74")
 
-[node name="PanelContainer2" type="PanelContainer" parent="UI/MarginContainer/HBoxContainer"]
+[node name="Life2" type="TextureRect" parent="UI/MarginContainer/HBoxContainer/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 10
+texture = SubResource("AtlasTexture_vef74")
 
-[node name="Lilypads" type="Label" parent="UI/MarginContainer/HBoxContainer/PanelContainer2"]
+[node name="Life3" type="TextureRect" parent="UI/MarginContainer/HBoxContainer/HBoxContainer"]
 layout_mode = 2
-text = "0"
+texture = SubResource("AtlasTexture_vef74")
+
+[node name="PanelContainer3" type="PanelContainer" parent="UI/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Timer" type="Label" parent="UI/MarginContainer/HBoxContainer/PanelContainer3"]
+layout_mode = 2
+text = "00"
+
+[node name="LilypadContainer" type="HBoxContainer" parent="UI/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+
+[node name="ScoreContainer" type="PanelContainer" parent="UI/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+
+[node name="Score" type="Label" parent="UI/MarginContainer/HBoxContainer/ScoreContainer"]
+layout_mode = 2
+text = "00"
+
+[node name="LevelContainer" type="MarginContainer" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -235.0
+offset_top = -16.0
+offset_right = 235.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("7_vef74")
+
+[node name="LevelLabel" type="Label" parent="UI/LevelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Level 1"
+
+[node name="GameOverContainer" type="MarginContainer" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -235.0
+offset_top = -16.0
+offset_right = 235.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("7_vef74")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/GameOverContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="GameOverLabel" type="Label" parent="UI/GameOverContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Game Over"
+
+[node name="RestartButton" type="Button" parent="UI/GameOverContainer/VBoxContainer"]
+layout_mode = 2
+text = "Restart"
+
+[node name="PauseMenu" type="MarginContainer" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -35.0
+offset_top = -33.0
+offset_right = 35.0
+offset_bottom = 33.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("7_vef74")
+
+[node name="PauseContainer" type="VBoxContainer" parent="UI/PauseMenu"]
+layout_mode = 2
+
+[node name="Resume" type="Button" parent="UI/PauseMenu/PauseContainer"]
+layout_mode = 2
+text = "Resume"
+
+[node name="Restart" type="Button" parent="UI/PauseMenu/PauseContainer"]
+layout_mode = 2
+text = "Restart"
+
+[node name="SoundManager" type="Node" parent="."]
+
+[node name="PointScored" type="AudioStreamPlayer2D" parent="SoundManager"]
+stream = ExtResource("7_eow3j")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_hve3p")
+}
 
 [connection signal="body_entered" from="KillCarArea" to="." method="_on_kill_car_area_body_entered"]
 [connection signal="body_entered" from="KillCarArea2" to="." method="_on_kill_car_area_2_body_entered"]
+[connection signal="pressed" from="UI/GameOverContainer/VBoxContainer/RestartButton" to="." method="_on_restart_button_pressed"]
+[connection signal="pressed" from="UI/PauseMenu/PauseContainer/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="UI/PauseMenu/PauseContainer/Restart" to="." method="_on_restart_pressed"]
+[connection signal="finished" from="SoundManager/PointScored" to="." method="_on_point_scored_finished"]

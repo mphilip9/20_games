@@ -2,6 +2,9 @@ extends CharacterBody2D
 
 @onready var frog_sprite: AnimatedSprite2D = $FrogSprite
 @onready var water_check_timer: Timer = Timer.new()
+@onready var frog_jump: AudioStreamPlayer2D = $FrogJump
+@onready var death_sound: AudioStreamPlayer2D = $DeathSound
+@onready var run_timer: Timer = $RunTimer
 
 var tile_size = 16
 var is_moving = false
@@ -12,16 +15,20 @@ var is_dead: bool = false
 
 
 signal death(frog_node)
-signal lilypad_reached(frog_node)
+signal lilypad_reached(frog_node, complete)
 
 var current_platform: AnimatableBody2D
 
 func _ready():
+	#frog_sprite.play('idle')
 	# Setup the water check timer
 	add_child(water_check_timer)
 	water_check_timer.wait_time = 0.15  # Grace period in seconds
 	water_check_timer.one_shot = true
 	water_check_timer.timeout.connect(_on_water_check_timeout)
+
+func _process(delta: float):
+	GameManager.time = run_timer.time_left
 
 func _physics_process(delta):
 	# Check if standing on a moving platform
@@ -48,6 +55,8 @@ func check_for_platform():
 		platform_velocity = Vector2.ZERO
 
 func handle_input():
+	if is_dead:
+		return
 	var input_dir = Vector2.ZERO
 
 	if Input.is_action_just_pressed("left"):
@@ -69,6 +78,7 @@ func handle_input():
 
 func move_to_tile(direction: Vector2):
 	frog_sprite.play('jump')
+	frog_jump.play()
 	is_moving = true
 	var target_position = position + direction * tile_size
 
@@ -77,7 +87,8 @@ func move_to_tile(direction: Vector2):
 	await tween.finished
 
 	is_moving = false
-
+	if !is_dead:
+		frog_sprite.play('idle')
 	# After landing, check if we're in water and not on a platform
 	if in_water_area:
 		_check_water_death()
@@ -85,8 +96,9 @@ func move_to_tile(direction: Vector2):
 func _check_water_death():
 	# Only kill if in water, not moving, and not on a platform
 	if in_water_area and not is_moving and not current_platform:
-		print_debug('killed by water', current_platform, is_moving)
-		death.emit(self)
+		is_dead = true
+		death_sound.play()
+		frog_sprite.play('water_death')
 
 
 func _on_water_check_timeout():
@@ -94,12 +106,15 @@ func _on_water_check_timeout():
 
 # Connected to the Area2D signals
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if GameManager.is_dead:
+	if is_dead:
 		return
-	#print("Frame: ", Engine.get_process_frames(), " Body entered: ", body.name, " at position: ", body.global_position)
-	#print("Frog position: ", global_position, " Is moving: ", is_moving)
 	if body.is_in_group('car'):
-		death.emit(self)
+		#death.emit(self)
+		is_dead = true
+
+		death_sound.play()
+
+		frog_sprite.play('death')
 
 	elif body is AnimatableBody2D:
 		current_platform = body
@@ -109,8 +124,11 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 
 func _on_area_2d_area_entered(area: Area2D) -> void:
 	print(area)
-	if area.get_parent().is_in_group('lilypad'):
-		lilypad_reached.emit(self)
+	if area.is_in_group('lilypad'):
+		var complete = area.get_parent().status_complete
+		if !complete:
+			area.get_parent().complete_lilypad()
+		lilypad_reached.emit(self, complete)
 		water_check_timer.stop()
 		return
 	# Assuming this is the water area
@@ -134,3 +152,14 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 		# If we left a platform and we're still in water, start the death timer
 		if in_water_area and not is_moving:
 			water_check_timer.start()
+
+
+
+
+func _on_death_sound_finished() -> void:
+	death.emit(self)
+
+
+func _on_run_timer_timeout() -> void:
+	death_sound.play()
+	frog_sprite.play('death')

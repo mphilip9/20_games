@@ -22,10 +22,9 @@ GameManager="*res://game_manager.gd"
 [display]
 
 window/size/viewport_width=480
-window/size/viewport_height=224
+window/size/viewport_height=256
 window/size/mode=2
 window/stretch/mode="viewport"
-window/stretch/aspect="expand"
 
 [file_customization]
 
@@ -40,6 +39,7 @@ frog=""
 water="group for water kill area"
 car=""
 lilypad=""
+kill_area=""
 
 [input]
 

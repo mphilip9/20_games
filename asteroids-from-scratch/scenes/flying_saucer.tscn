@@ -1,0 +1,88 @@
+[gd_scene load_steps=14 format=3 uid="uid://0n4dj1etus0m"]
+
+[ext_resource type="Script" uid="uid://c60kt7283s1ct" path="res://scenes/flying_saucer.gd" id="1_hwxfr"]
+[ext_resource type="PackedScene" uid="uid://cpq8d0x276h8g" path="res://scenes/alien_bullet.tscn" id="2_agp5s"]
+[ext_resource type="PackedScene" uid="uid://dljngmceb5ymu" path="res://scenes/death_particles.tscn" id="3_kfna3"]
+[ext_resource type="AudioStream" uid="uid://b2ki7vwh3d4ct" path="res://sounds/kenney_sci-fi-sounds/Audio/spaceEngine_000.ogg" id="4_00f32"]
+[ext_resource type="Texture2D" uid="uid://bsc05h0kqg3i" path="res://assets/flying_saucer_animations.png" id="4_kfna3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kfna3"]
+atlas = ExtResource("4_kfna3")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g30d5"]
+atlas = ExtResource("4_kfna3")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j0g0t"]
+atlas = ExtResource("4_kfna3")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jxx83"]
+atlas = ExtResource("4_kfna3")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lk56t"]
+atlas = ExtResource("4_kfna3")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s3j40"]
+atlas = ExtResource("4_kfna3")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_s3j40"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kfna3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g30d5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j0g0t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jxx83")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lk56t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s3j40")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_slo1u"]
+size = Vector2(32, 23)
+
+[node name="FlyingSaucer" type="CharacterBody2D"]
+collision_mask = 7
+script = ExtResource("1_hwxfr")
+bullet_scene = ExtResource("2_agp5s")
+death_particles_scene = ExtResource("3_kfna3")
+
+[node name="FlyingSaucerSprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_s3j40")
+animation = &"fly"
+frame_progress = 0.720341
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, -2.5)
+shape = SubResource("RectangleShape2D_slo1u")
+
+[node name="BulletTimer" type="Timer" parent="."]
+
+[node name="EngineSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_00f32")
+autoplay = true
+parameters/looping = true
+
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
+[connection signal="timeout" from="BulletTimer" to="." method="_on_bullet_timer_timeout"]

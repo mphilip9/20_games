@@ -6,27 +6,31 @@ extends Node
 @export var lives: int = 3
 @export var is_dead: bool = false
 @export var time: float = 30
+@export var restarted_game: bool = false
 
 func new_level():
 	lilypads = 0
 	level += 1
 	lives = 3
 	is_dead = false
-	time = 30.0
+	time = 30.0 - level + 1
 	get_tree().reload_current_scene()
 
 func restart_game():
+	restarted_game = true
 	lilypads = 0
 	level = 1
 	lives = 3
 	is_dead = false
 	time= 30.0
+	score = 0
 	get_tree().reload_current_scene()
 	get_tree().paused = false
 
 
+
 func get_diff_multiplier():
-	var scaling_factor = 1.08
+	var scaling_factor = 1.17
 	if level == 1:
 		return 1
 	var multiplier = 1 * pow(scaling_factor, level - 1)

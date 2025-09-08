@@ -2,7 +2,10 @@ extends Node2D
 @onready var starting_position: Marker2D = $Markers/StartingPosition
 @onready var lilypad_lane: Marker2D = $Markers/LilypadLane
 @onready var point_scored: AudioStreamPlayer2D = $SoundManager/PointScored
-@onready var level_container: MarginContainer = $UI/LevelContainer
+@onready var level_container: VBoxContainer = $UI/LevelContainer
+@onready var music: AudioStreamPlayer2D = $SoundManager/Music
+@onready var start_game_container: MarginContainer = $UI/StartGameContainer
+
 @onready var level_label: Label = $UI/LevelContainer/LevelLabel
 @onready var game_over_container: MarginContainer = $UI/GameOverContainer
 @onready var game_over_label: Label = $UI/GameOverContainer/VBoxContainer/GameOverLabel
@@ -25,7 +28,7 @@ var difficulty: float
 var paused: bool = false
 # determine speed for each lane in _ready func
 # Difficulty logic
-# --- Base Values (Editable in Inspector) ---
+# --- Base Values ---
 @export var initial_min_time: float = 2.0
 @export var initial_max_time: float = 5.0
 
@@ -53,15 +56,27 @@ func get_spawn_interval(difficulty_multiplier: float) -> float:
 	# 3. Get the final random value from the new, difficulty-adjusted range.
 	var spawn_interval = rng.randf_range(current_min, current_max)
 	return spawn_interval
-func _ready():
-	level_label.text = 'Level ' + str(GameManager.level)
+func start_game():
+	get_tree().paused = false
+	if GameManager.level == 1:
+		level_label.text = 'Level ' + str(GameManager.level)
+	else:
+		level_label.text = 'Level ' + str(GameManager.level)
 	difficulty = GameManager.get_diff_multiplier()
 	frog.position = starting_position.position
 	frog.death.connect(_on_frog_death)
 	frog.lilypad_reached.connect(_on_lilypad_reached)
 	spawn_objects_on_markers()
 	spawn_lilypads()
-	animation_player.play('level')
+	animation_player.play('level_2')
+
+func _ready():
+	get_tree().paused = true
+	if GameManager.level != 1 or GameManager.restarted_game:
+		start_game_container.visible = false
+		start_game()
+		GameManager.restarted_game = false
+
 
 func _input(event):
 	if event.is_action_pressed("pause"):
@@ -84,8 +99,12 @@ func pick_scene(name: String) -> PackedScene:
 	if name.begins_with("Car"):
 		scene_to_spawn = car_scene
 	elif name.begins_with("Log"):
-		var rand_log = randf_range(0,1)
-		if rand_log > 0.8:
+		# Direct level scaling: +5% crocs per level
+		var base_croc_chance = 0.15
+		var croc_chance = min(base_croc_chance + (GameManager.level * 0.05), 0.85)
+
+		var rand_log = randf_range(0, 1)
+		if rand_log < croc_chance:
 			scene_to_spawn = croc_scene
 		else:
 			scene_to_spawn = log_scene
@@ -105,6 +124,8 @@ func _on_lilypad_reached(frog_node: CharacterBody2D, complete: bool):
 	if not complete:
 		GameManager.lilypads += 1
 		GameManager.score += 1000 + GameManager.time * 5
+		if GameManager.lilypads == 5:
+			level_label.text = 'LEVEL COMPLETE'
 
 
 func _on_frog_death(frog_node: CharacterBody2D):
@@ -209,3 +230,13 @@ func _on_restart_pressed() -> void:
 func _on_resume_pressed() -> void:
 	get_tree().paused = false
 	pause_menu.visible = false
+
+
+
+func _on_music_finished() -> void:
+	music.play()
+
+
+func _on_start_game_pressed() -> void:
+	start_game_container.visible = false
+	start_game()

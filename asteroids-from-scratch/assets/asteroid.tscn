@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://cx1agat87i0o2"]
+
+[ext_resource type="Script" uid="uid://c4488blv3i08b" path="res://scenes/asteroid.gd" id="1_6mo6b"]
+[ext_resource type="Texture2D" uid="uid://cbus0x74684yo" path="res://assets/asteroid_v1.png" id="1_akfqu"]
+[ext_resource type="PackedScene" uid="uid://dljngmceb5ymu" path="res://scenes/death_particles.tscn" id="2_t4se3"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_akfqu"]
+radius = 17.0
+
+[node name="Asteroid" type="Area2D"]
+collision_mask = 6
+script = ExtResource("1_6mo6b")
+death_animation = ExtResource("2_t4se3")
+
+[node name="AsteroidSprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_akfqu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_akfqu")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

@@ -2,7 +2,6 @@ extends CharacterBody2D
 @onready var thrust_audio: AudioStreamPlayer2D = $ThrustAudio
 @onready var hitbox: Area2D = $Hitbox
 @onready var spawn_immunity_timer: Timer = $SpawnImmunityTimer
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var player_sprite: AnimatedSprite2D = $PlayerSprite
 
 
@@ -10,8 +9,8 @@ extends CharacterBody2D
 @export var weapon: String
 @export var shield: bool = false
 @onready var shield_sprite: Sprite2D = $ShieldSprite
-@onready var bullet_launch_point: Marker2D = $BulletLaunchPoint
 @export var died: bool = false
+@onready var weapon_timer: Timer = $WeaponTimer
 
 @export var death_particles_scene: PackedScene
 
@@ -34,11 +33,23 @@ func _ready() -> void:
 
 
 func shoot_bullet() -> void:
-	var b = bullet.instantiate()
-	b.position = position
-	b.rotation = rotation
-	b.direction = -transform.y
-	get_parent().add_child(b)
+	if weapon == 'shotgun':
+		AudioManager.play("res://sounds/kenney_sci-fi-sounds/Audio/laserLarge_000.ogg")
+		var spread_angles = [-15, 0, 15]
+		for angle_offset in spread_angles:
+			var b = bullet.instantiate()
+			b.speed = 400
+			b.position = position
+			b.direction = -transform.y.rotated(deg_to_rad(angle_offset))
+			b.rotation = rotation + deg_to_rad(angle_offset)
+			get_parent().add_child(b)
+	else:
+		AudioManager.play("res://sounds/kenney_sci-fi-sounds/Audio/laserSmall_000.ogg")
+		var b = bullet.instantiate()
+		b.position = position
+		b.rotation = rotation
+		b.direction = -transform.y
+		get_parent().add_child(b)
 
 
 func wrap_around_screen():
@@ -93,17 +104,44 @@ func trigger_death_animation() -> void:
 	get_parent().add_child(death_particles)
 
 func kill_player() -> void:
-	AudioManager.play("res://sounds/kenney_sci-fi-sounds/Audio/explosionCrunch_000.ogg")
-	trigger_death_animation()
-	player_death.emit()
-	queue_free()
+	if shield:
+		print('player should not die')
+		shield = false
+		shield_sprite.visible = false
+		hitbox.call_deferred("set_monitorable", false)
+		hitbox.call_deferred("set_monitoring", false)
+		spawn_immunity_timer.start()
+	else:
+		AudioManager.play("res://sounds/kenney_sci-fi-sounds/Audio/explosionCrunch_000.ogg")
+		trigger_death_animation()
+		player_death.emit()
+		queue_free()
+
+func handle_powerup(area: Area2D) -> void:
+	AudioManager.play("res://sounds/SynthChime6.mp3")
+	if area.type == 'shotgun':
+		weapon = 'shotgun'
+		weapon_timer.start()
+	elif area.type == 'shield':
+		shield = true
+		shield_sprite.visible = true
+	area.queue_free()
+	return
+
 
 func _on_hitbox_body_entered(body: Node2D) -> void:
 	kill_player()
 
 func _on_hitbox_area_entered(area: Area2D) -> void:
-	kill_player()
+	if area.is_in_group('powerup'):
+		handle_powerup(area)
+	else:
+		kill_player()
 
 func _on_spawn_immunity_timer_timeout() -> void:
 	hitbox.monitorable = true
 	hitbox.monitoring = true
+
+
+func _on_weapon_timer_timeout() -> void:
+	weapon = 'standard'

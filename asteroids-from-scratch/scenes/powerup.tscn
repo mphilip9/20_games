@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=3 uid="uid://tsab8jsq3fm5"]
+
+[ext_resource type="Texture2D" uid="uid://dr6slp2x3i5ow" path="res://assets/shield_sprite.png" id="1_8vsy1"]
+[ext_resource type="Script" uid="uid://dvvqayqnqmkka" path="res://scenes/powerup.gd" id="1_ih772"]
+[ext_resource type="Texture2D" uid="uid://vjp4wmscr1sn" path="res://assets/shotgun.png" id="2_406cw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ih772"]
+size = Vector2(29, 30)
+
+[sub_resource type="Animation" id="Animation_406cw"]
+resource_name = "spin"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pufsy"]
+_data = {
+&"spin": SubResource("Animation_406cw")
+}
+
+[node name="Powerup" type="Area2D" groups=["powerup"]]
+collision_layer = 32
+collision_mask = 0
+script = ExtResource("1_ih772")
+type = "shotgun"
+shotgun = ExtResource("2_406cw")
+shield = ExtResource("1_8vsy1")
+
+[node name="PupShape" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 1)
+shape = SubResource("RectangleShape2D_ih772")
+
+[node name="PupSprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_8vsy1")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_pufsy")
+}

@@ -71,7 +71,7 @@ animation = &"fly"
 frame_progress = 0.720341
 
 [node name="Hitbox" type="Area2D" parent="."]
-collision_mask = 5
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 position = Vector2(0, -2.5)

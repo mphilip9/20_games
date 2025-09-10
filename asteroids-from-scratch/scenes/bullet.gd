@@ -3,11 +3,9 @@ extends Area2D
 
 @export var speed: float = 600
 @export var direction: Vector2
-@export var bullet_sound: String
 var screen_size: Vector2
 
 func _ready() -> void:
-	AudioManager.play(bullet_sound)
 	screen_size = get_viewport().get_visible_rect().size
 
 # Bullet direction is determined by Player
@@ -27,7 +25,6 @@ func _physics_process(delta):
 
 
 func _on_area_exited(area: Area2D) -> void:
-	print('should the bullet be destroyed??')
 	queue_free()
 
 

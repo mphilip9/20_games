@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bef6qbbfrvb14"]
+[gd_scene load_steps=9 format=3 uid="uid://bef6qbbfrvb14"]
 
 [ext_resource type="Script" uid="uid://c2i1rmaipx45w" path="res://game.gd" id="1_7jktm"]
 [ext_resource type="PackedScene" uid="uid://b5wwlq8ic5jno" path="res://scenes/player.tscn" id="1_80nbo"]
@@ -7,11 +7,13 @@
 [ext_resource type="Script" uid="uid://b8reqn3wepuly" path="res://game_manager.gd" id="4_fc0e3"]
 [ext_resource type="Script" uid="uid://dk7o2nrh3atno" path="res://audio_manager.gd" id="6_ryrav"]
 [ext_resource type="AudioStream" uid="uid://o2haewkhq0b8" path="res://sounds/When-Machines-Dream_Looping.mp3" id="7_eow3j"]
+[ext_resource type="PackedScene" uid="uid://tsab8jsq3fm5" path="res://scenes/powerup.tscn" id="8_j5wjh"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_7jktm")
 asteroid_scene = ExtResource("3_feb5d")
 player_scene = ExtResource("1_80nbo")
+ufo_scene = ExtResource("2_e2o6t")
 
 [node name="BackgroundColor" type="ColorRect" parent="."]
 offset_left = -24.0
@@ -19,9 +21,6 @@ offset_top = -13.0
 offset_right = 659.0
 offset_bottom = 380.0
 color = Color(0.000113828, 0.000113828, 0.000113828, 1)
-
-[node name="FlyingSaucer" parent="." instance=ExtResource("2_e2o6t")]
-position = Vector2(180, 122)
 
 [node name="GameManager" type="Node" parent="."]
 script = ExtResource("4_fc0e3")
@@ -35,3 +34,21 @@ script = ExtResource("6_ryrav")
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("7_eow3j")
 autoplay = true
+
+[node name="Powerup" parent="." instance=ExtResource("8_j5wjh")]
+position = Vector2(447, 200)
+
+[node name="Powerup2" parent="." instance=ExtResource("8_j5wjh")]
+position = Vector2(158, 181)
+type = "shield"
+
+[node name="UFOTimer" type="Timer" parent="."]
+wait_time = 25.0
+autostart = true
+
+[node name="WaveCooldown" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="timeout" from="UFOTimer" to="." method="_on_ufo_timer_timeout"]
+[connection signal="timeout" from="WaveCooldown" to="." method="_on_wave_cooldown_timeout"]

@@ -6,14 +6,41 @@ extends Area2D
 @export var rotation_speed: float
 @export var size: int = 3
 @export var death_animation: PackedScene
+@export var wave_spawn: bool
+var is_destroyed: bool = false
 
 signal asteroid_destroyed(pos: Vector2, size: int, speed: float)
 
 var screen_size: Vector2
 var _self_scene: PackedScene
+
+func spawn_on_periphery() -> void:
+	# Choose a random edge: 0=top, 1=right, 2=bottom, 3=left
+	var edge = randi() % 4
+	var spawn_pos: Vector2
+	var target_pos: Vector2
+
+	match edge:
+		0: # Top edge
+			spawn_pos = Vector2(randf() * screen_size.x, -50)
+			target_pos = Vector2(randf() * screen_size.x, screen_size.y + 50)
+		1: # Right edge
+			spawn_pos = Vector2(screen_size.x + 50, randf() * screen_size.y)
+			target_pos = Vector2(-50, randf() * screen_size.y)
+		2: # Bottom edge
+			spawn_pos = Vector2(randf() * screen_size.x, screen_size.y + 50)
+			target_pos = Vector2(randf() * screen_size.x, -50)
+		3: # Left edge
+			spawn_pos = Vector2(-50, randf() * screen_size.y)
+			target_pos = Vector2(screen_size.x + 50, randf() * screen_size.y)
+
+	# Set position
+	global_position = spawn_pos
 func _ready() -> void:
 	scale = Vector2(size, size)
 	screen_size = get_viewport().get_visible_rect().size
+	if wave_spawn:
+		spawn_on_periphery()
  	# Random movement direction
 	direction = Vector2.from_angle(randf() * TAU)
 
@@ -31,6 +58,8 @@ func wrap_around_screen():
 	position.y = wrapf(position.y, 0, screen_size.y)
 
 func _physics_process(delta):
+	if is_destroyed:
+		return
 	position += direction * speed * delta
 	rotation += rotation_speed * delta
 	wrap_around_screen()
@@ -45,7 +74,11 @@ func trigger_death_animation() -> void:
 
 
 func _on_area_entered(area: Area2D) -> void:
+	if is_destroyed:
+		return
+	is_destroyed = true
 	trigger_death_animation()
 	asteroid_destroyed.emit(position, size, speed)
+
 	AudioManager.play("res://sounds/kenney_sci-fi-sounds/Audio/lowFrequency_explosion_000.ogg")
 	queue_free()

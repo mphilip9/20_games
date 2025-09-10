@@ -34,6 +34,10 @@ folder_colors={
 "res://sounds/": "green"
 }
 
+[global_group]
+
+powerup=""
+
 [input]
 
 move={

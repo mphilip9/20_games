@@ -1,10 +1,11 @@
 extends CharacterBody2D
 
-@export var speed = 200
+@export var speed = 100
 @export var fire_rate: float = 1.5
 @export var bullet_scene: PackedScene
 @export var size: float
 @export var death_particles_scene: PackedScene
+@export var direction: Vector2
 var screen_size: Vector2
 @onready var bullet_timer: Timer = $BulletTimer
 @onready var engine_sound: AudioStreamPlayer2D = $EngineSound
@@ -15,13 +16,23 @@ var screen_size: Vector2
 # The ship needs to fire bullets in the general direction of the player
 # We could track the position of the player in GameManager
 # And then fire in that direction, with a bit of inaccuracy added
+func spawn_somewhere() -> void:
+	# Randomly choose left (0) or right (1) side
+	var spawn_side = randi() % 2
 
-#The ship should move across the screen at at fixed speed
+	if spawn_side == 0:
+		global_position = Vector2(-50, randf() * screen_size.y)
+		direction = Vector2(1, 0)
+	else:
+		global_position = Vector2(screen_size.x + 50, randf() * screen_size.y)
+		direction = Vector2(-1, 0)
 func _ready() -> void:
 	flying_saucer_sprite.play("fly")
 	bullet_timer.wait_time = fire_rate
 	bullet_timer.start()
 	screen_size = get_viewport().get_visible_rect().size
+	spawn_somewhere()
+
 func wrap_around_screen():
 	# wrapf(value, min, max) wraps the value between min and max
 	position.x = wrapf(position.x, 0, screen_size.x)
@@ -29,7 +40,7 @@ func wrap_around_screen():
 
 func get_input():
 	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	velocity = Vector2(1, 0) * speed
+	velocity = direction * speed
 
 func _physics_process(delta):
 	get_input()
@@ -46,12 +57,15 @@ func trigger_death_animation() -> void:
 func kill_saucer() -> void:
 	AudioManager.play("res://sounds/kenney_sci-fi-sounds/Audio/explosionCrunch_000.ogg")
 	trigger_death_animation()
+	GameManager.ufos_count -= 1
 	queue_free()
 
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	kill_saucer()
 
 func shoot_bullet() -> void:
+	AudioManager.play("res://sounds/kenney_sci-fi-sounds/Audio/laserSmall_001.ogg")
+
 	var b = bullet_scene.instantiate()
 	b.position = position
 	#b.rotation = rotation

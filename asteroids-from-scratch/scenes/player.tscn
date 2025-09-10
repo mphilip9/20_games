@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b5wwlq8ic5jno"]
+[gd_scene load_steps=12 format=3 uid="uid://b5wwlq8ic5jno"]
 
 [ext_resource type="Script" uid="uid://b5m8coo2miceg" path="res://scenes/player.gd" id="1_g2els"]
 [ext_resource type="PackedScene" uid="uid://cu0kcm2y54olv" path="res://scenes/bullet.tscn" id="2_dqkch"]
@@ -48,20 +48,6 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="Animation" id="Animation_tuyoq"]
-length = 0.001
-
-[sub_resource type="Animation" id="Animation_fjrip"]
-resource_name = "thrust"
-length = 0.3
-loop_mode = 1
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_smehm"]
-_data = {
-&"RESET": SubResource("Animation_tuyoq"),
-&"thrust": SubResource("Animation_fjrip")
-}
-
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 0
 collision_mask = 0
@@ -81,7 +67,7 @@ texture = ExtResource("3_qhqgy")
 
 [node name="Hitbox" type="Area2D" parent="."]
 collision_layer = 2
-collision_mask = 9
+collision_mask = 41
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitbox"]
 polygon = PackedVector2Array(-12, 5, -4, -3, 0, -15, 4, -3, 13, 6, 6, 7, 0, 13, -6, 7)
@@ -95,11 +81,10 @@ stream = ExtResource("6_tuyoq")
 volume_db = -5.808
 parameters/looping = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_smehm")
-}
+[node name="WeaponTimer" type="Timer" parent="."]
+wait_time = 40.0
 
 [connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
 [connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
 [connection signal="timeout" from="SpawnImmunityTimer" to="." method="_on_spawn_immunity_timer_timeout"]
+[connection signal="timeout" from="WeaponTimer" to="." method="_on_weapon_timer_timeout"]

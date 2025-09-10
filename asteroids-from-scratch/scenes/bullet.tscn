@@ -8,7 +8,6 @@ size = Vector2(4, 13)
 [node name="Bullet" type="Area2D"]
 collision_layer = 4
 script = ExtResource("1_mkf8s")
-bullet_sound = "res://sounds/kenney_sci-fi-sounds/Audio/laserSmall_000.ogg"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(2, 6.5)

@@ -1,6 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://r2hlrcb4fld4"]
+[gd_scene load_steps=4 format=3 uid="uid://r2hlrcb4fld4"]
 
 [ext_resource type="Script" uid="uid://diqs1iipwyu6x" path="res://scenes/main_menu.gd" id="1_l6cm7"]
+
+[sub_resource type="Theme" id="Theme_l6cm7"]
+Label/colors/font_color = Color(0.0901961, 0.635294, 1, 1)
+Label/font_sizes/font_size = 40
+Label/fonts/font = null
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ekxnf"]
 content_margin_left = 10.0
@@ -23,15 +28,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_l6cm7")
 
-[node name="ColorRect" type="ColorRect" parent="."]
-modulate = Color(0.051971, 0.051971, 0.051971, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
 [node name="ButtonContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -46,10 +42,35 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="Label" type="Label" parent="ButtonContainer"]
+layout_mode = 2
+theme = SubResource("Theme_l6cm7")
+text = "MASTER BLASTER"
+
 [node name="Button" type="Button" parent="ButtonContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxFlat_ekxnf")
 text = "START GAME"
+
+[node name="MarginContainer" type="MarginContainer" parent="ButtonContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="PanelContainer" type="PanelContainer" parent="ButtonContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ButtonContainer/MarginContainer/PanelContainer"]
+layout_mode = 2
+text = "Controls
+* Shoot with space bar
+* Move with arrow keys or WASD
+
+Get blastin'
+"
+fit_content = true
 
 [connection signal="pressed" from="ButtonContainer/Button" to="." method="_on_button_pressed"]

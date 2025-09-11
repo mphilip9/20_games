@@ -1,12 +1,13 @@
 extends Area2D
 
 
-@export var speed: float = 100
+@export var speed: float = 50
 @export var direction: Vector2
 @export var rotation_speed: float
-@export var size: int = 3
+@export var size: float = 2
 @export var death_animation: PackedScene
 @export var wave_spawn: bool
+@export var score: int = 0
 var is_destroyed: bool = false
 
 signal asteroid_destroyed(pos: Vector2, size: int, speed: float)
@@ -37,6 +38,8 @@ func spawn_on_periphery() -> void:
 	# Set position
 	global_position = spawn_pos
 func _ready() -> void:
+	speed = GameManager.asteroid_speed()
+
 	scale = Vector2(size, size)
 	screen_size = get_viewport().get_visible_rect().size
 	if wave_spawn:

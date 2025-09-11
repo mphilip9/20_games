@@ -16,10 +16,14 @@ extends CharacterBody2D
 
 
 var thrust_power = 200.0
-var rotation_speed = 3.0
+var rotation_speed = 3.5
 var drag = 0.98
 var screen_size: Vector2
 var is_thrusting: bool
+var rotation_smoothing = 8.0
+var target_rotation_velocity = 0.0
+var rotation_velocity = 0.0
+
 
 signal player_death
 
@@ -64,10 +68,15 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func get_input(delta):
 	# Handle rotation
+	target_rotation_velocity = 0.0
 	if Input.is_action_pressed("rotate_left"):
-		rotation -= rotation_speed * delta
+		target_rotation_velocity = -rotation_speed
 	if Input.is_action_pressed("rotate_right"):
-		rotation += rotation_speed * delta
+		target_rotation_velocity = rotation_speed
+
+	# Smooth the rotation
+	rotation_velocity = lerp(rotation_velocity, target_rotation_velocity, rotation_smoothing * delta)
+	rotation += rotation_velocity * delta
 
 	# Handle thrust
 	if Input.is_action_pressed("move"):

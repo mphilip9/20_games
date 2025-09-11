@@ -12,11 +12,19 @@ var time_elapsed = 0.0
 
 
 func _ready() -> void:
+	var random = randf_range(0, 1)
+	if random > 0.5:
+		type = 'shotgun'
+	else:
+		type = 'shield'
 	if type == 'shotgun':
 		pup_sprite.texture = shotgun
 	else:
 		pup_sprite.texture = shield
 
+	var screen_size = get_viewport().get_visible_rect().size
+	position.x = randf_range(0, screen_size.x)
+	position.y = randf_range(0, screen_size.y)
 func _process(delta):
 	time_elapsed += delta
 	rotation += 1.0 * delta

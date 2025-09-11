@@ -27,6 +27,7 @@ func spawn_somewhere() -> void:
 		global_position = Vector2(screen_size.x + 50, randf() * screen_size.y)
 		direction = Vector2(-1, 0)
 func _ready() -> void:
+	scale = Vector2(size, size)
 	flying_saucer_sprite.play("fly")
 	bullet_timer.wait_time = fire_rate
 	bullet_timer.start()
@@ -45,7 +46,7 @@ func get_input():
 func _physics_process(delta):
 	get_input()
 	move_and_slide()
-	wrap_around_screen()
+	#wrap_around_screen()
 
 func trigger_death_animation() -> void:
 	var death_particles = death_particles_scene.instantiate()
@@ -58,6 +59,10 @@ func kill_saucer() -> void:
 	AudioManager.play("res://sounds/kenney_sci-fi-sounds/Audio/explosionCrunch_000.ogg")
 	trigger_death_animation()
 	GameManager.ufos_count -= 1
+	if size < 1:
+		GameManager.score += 700
+	else:
+		GameManager.score += 500
 	queue_free()
 
 func _on_hitbox_area_entered(area: Area2D) -> void:
@@ -76,6 +81,8 @@ func shoot_bullet() -> void:
 
 	b.direction = final_direction
 	b.rotation = final_direction.angle() + PI/2 # +90° if bullet sprite points up
+	if size < 1:
+		b.speed = 600
 
 	get_parent().add_child(b)
 

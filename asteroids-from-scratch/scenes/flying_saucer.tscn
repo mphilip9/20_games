@@ -70,7 +70,7 @@ sprite_frames = SubResource("SpriteFrames_s3j40")
 animation = &"fly"
 frame_progress = 0.720341
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="Hitbox" type="Area2D" parent="." groups=["ufo"]]
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]

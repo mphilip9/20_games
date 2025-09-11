@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dhygsno84dk0e"]
+
+[ext_resource type="Texture2D" uid="uid://5e1j7d3o08kg" path="res://assets/space_ship.png" id="1_tf86k"]
+
+[node name="Life" type="TextureRect"]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("1_tf86k")
+expand_mode = 2
+stretch_mode = 3

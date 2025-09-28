@@ -82,7 +82,7 @@ volume_db = -5.808
 parameters/looping = true
 
 [node name="WeaponTimer" type="Timer" parent="."]
-wait_time = 40.0
+wait_time = 30.0
 
 [connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
 [connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]

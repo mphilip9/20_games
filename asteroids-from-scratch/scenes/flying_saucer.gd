@@ -46,7 +46,6 @@ func get_input():
 func _physics_process(delta):
 	get_input()
 	move_and_slide()
-	#wrap_around_screen()
 
 func trigger_death_animation() -> void:
 	var death_particles = death_particles_scene.instantiate()
@@ -60,7 +59,7 @@ func kill_saucer() -> void:
 	trigger_death_animation()
 	GameManager.ufos_count -= 1
 	if size < 1:
-		GameManager.score += 700
+		GameManager.score += 900
 	else:
 		GameManager.score += 500
 	queue_free()
@@ -75,14 +74,17 @@ func shoot_bullet() -> void:
 	b.position = position
 	#b.rotation = rotation
 	var direction_to_player = (GameManager.player_pos - position).normalized()
-
-	var inaccuracy_angle = randf_range(-0.5, 0.5)
+	var inaccuracy_angle = randf_range(-1, 1)
+	if size < 1:
+		inaccuracy_angle = randf_range(-0.6, 0.6)
 	var final_direction = direction_to_player.rotated(inaccuracy_angle)
 
 	b.direction = final_direction
 	b.rotation = final_direction.angle() + PI/2 # +90° if bullet sprite points up
 	if size < 1:
-		b.speed = 600
+		b.speed = 500
+	else:
+		b.speed = 350
 
 	get_parent().add_child(b)
 

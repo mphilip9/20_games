@@ -39,8 +39,10 @@ func spawn_on_periphery() -> void:
 	global_position = spawn_pos
 func _ready() -> void:
 	speed = GameManager.asteroid_speed()
-
-	scale = Vector2(size, size)
+	if size < 1:
+		scale = Vector2(.7, .7)
+	else:
+		scale = Vector2(size, size)
 	screen_size = get_viewport().get_visible_rect().size
 	if wave_spawn:
 		spawn_on_periphery()

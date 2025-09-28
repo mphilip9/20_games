@@ -1,0 +1,30 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="MySceneManager"
+config/description="This is my personal scene manager. I can use it as a simple starting point for new projects. It allows me to already have a decent scene switcher setup"
+run/main_scene="uid://byje7lca6mloh"
+config/features=PackedStringArray("4.4", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+SceneManager="*res://scene_manager/SceneManager.gd"
+
+[debug]
+
+gdscript/warnings/untyped_declaration=2
+
+[display]
+
+window/size/viewport_width=640
+window/size/viewport_height=360

@@ -114,7 +114,6 @@ func trigger_death_animation() -> void:
 
 func kill_player() -> void:
 	if shield:
-		print('player should not die')
 		shield = false
 		shield_sprite.visible = false
 		hitbox.call_deferred("set_monitorable", false)

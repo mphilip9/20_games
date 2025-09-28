@@ -6,6 +6,7 @@ extends Node2D
 @onready var score_label: Label = $UILayer/Score/ScoreLabel
 @onready var game_over_container: VBoxContainer = $UILayer/GameOverContainer
 @onready var wave_label: Label = $"UILayer/Waves/Wave Label"
+@onready var pause_menu: MarginContainer = $UILayer/PauseMenu
 
 @export var asteroid_scene: PackedScene
 @export var player_scene: PackedScene
@@ -15,28 +16,16 @@ extends Node2D
 @export var life_texture: PackedScene
 
 
+
+
+func _process(delta: float):
+	score_label.text =  str(GameManager.score)
+
 func spawn_ufo() -> void:
 	GameManager.ufos_count += 1
 	var ufo = ufo_scene.instantiate()
 	ufo.size = 	GameManager.ufo_size()
 	add_child(ufo)
-
-
-func pause_game() -> void:
-	get_tree().paused = true
-
-func unpause_game() -> void:
-	get_tree().paused = false
-
-func show_game_over():
-	game_over_container.visible = true
-
-func _input(event):
-	if event.is_action_pressed("pause"):
-		pause_game()
-
-func _process(delta: float):
-	score_label.text =  str(GameManager.score)
 
 func spawn_asteroids() -> void:
 	var num = 3 + GameManager.wave
@@ -77,10 +66,12 @@ func set_lives() -> void:
 	for i in range(GameManager.lives):
 		add_life()
 
+func show_game_over():
+	game_over_container.visible = true
+
 func _on_player_death() -> void:
 	remove_life()
 	if GameManager.lives < 0:
-		print('lives', GameManager.lives)
 		show_game_over()
 		return
 	get_tree().create_timer(1.0).timeout.connect(func(): spawn_player(true))

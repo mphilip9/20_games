@@ -1,0 +1,59 @@
+[gd_scene load_steps=2 format=3 uid="uid://ceupt74uc3cms"]
+
+[ext_resource type="Script" uid="uid://b78q1qwqqi0y7" path="res://scene_manager/settings/settings_menu.gd" id="1_eh180"]
+
+[node name="SettingsMenu" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_eh180")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "Settings"
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SettingsVBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ToggleMusic" type="CheckButton" parent="PanelContainer/SettingsVBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Music"
+
+[node name="ToggleSFX" type="CheckButton" parent="PanelContainer/SettingsVBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Sound Effects"
+
+[node name="Fullscreen" type="CheckButton" parent="PanelContainer/SettingsVBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Fullscreen"

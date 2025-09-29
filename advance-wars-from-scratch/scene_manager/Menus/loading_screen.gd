@@ -40,7 +40,6 @@ func finish_transition() -> void:
 	if !anim_player.has_animation(ending_animation_name):
 		push_warning("'%s' animation does not exist" % ending_animation_name)
 		ending_animation_name = "start_fade_to_black"
-	print(ending_animation_name)
 	anim_player.play(ending_animation_name)
 	# once this final animation plays, we can free this scene
 	await anim_player.animation_finished

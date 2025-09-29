@@ -1,13 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://cxgdtho6f3375"]
+[gd_scene load_steps=4 format=3 uid="uid://cxgdtho6f3375"]
 
 [ext_resource type="Script" uid="uid://bdqohaj5rpl85" path="res://scene_manager/gameplay.gd" id="1_6gcy0"]
+[ext_resource type="AudioStream" uid="uid://cosgnq3mjhnmw" path="res://assets/Drifting-Off_Looping.mp3" id="2_djgo0"]
+[ext_resource type="PackedScene" uid="uid://4ffsds0qrhy7" path="res://scene_manager/Menus/pause_menu.tscn" id="2_i8tm1"]
 
 [node name="Gameplay" type="Node2D"]
 script = ExtResource("1_6gcy0")
 
+[node name="MusicExample" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_djgo0")
+parameters/looping = true
+
 [node name="CurrentLevel" type="Node2D" parent="."]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+process_mode = 3
 
 [node name="HUD" type="Control" parent="CanvasLayer"]
 layout_mode = 3
@@ -32,5 +39,7 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Return to Title
 "
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("2_i8tm1")]
 
 [connection signal="pressed" from="CanvasLayer/HUD/Button" to="." method="_on_button_pressed"]

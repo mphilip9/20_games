@@ -4,8 +4,11 @@ extends Control
 @onready var toggle_music: CheckButton = %ToggleMusic
 @onready var toggle_sfx: CheckButton = %ToggleSFX
 @onready var fullscreen: CheckButton = %Fullscreen
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 func _ready() -> void:
+	visible = false
+
 	# Initialize values
 	toggle_music.set_pressed_no_signal(Settings.play_music)
 	toggle_sfx.set_pressed_no_signal(Settings.play_sfx)
@@ -18,6 +21,9 @@ func _ready() -> void:
 	fullscreen.toggled.connect(_on_fullscreen_toggled)
 	# Handle initial focus for keyboard/gamepad navigation
 	_grab_first_focus()
+
+#	reset animations
+	animation_player.play("RESET")
 
 func _grab_first_focus() -> void:
 	for child in settings_v_box_container.get_children():
@@ -33,3 +39,9 @@ func _on_sfx_toggled(pressed: bool) -> void:
 
 func _on_fullscreen_toggled(pressed: bool) -> void:
 	Settings.set_setting("fullscreen", pressed)
+
+
+func _on_back_button_pressed() -> void:
+	animation_player.play_backwards('blur')
+	await animation_player.animation_finished
+	hide()

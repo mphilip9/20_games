@@ -3,6 +3,9 @@ extends Node
 var play_sfx: bool = true
 var play_music: bool = true
 var fullscreen: bool = false
+var master_volume: float
+var music_volume: float
+var sfx_volume: float
 var version: String
 var show_debug_ui: bool = false
 const SCENE_MAIN_MENU = "res://main_menu/main_menu.tscn"
@@ -34,7 +37,7 @@ func load_settings() -> void:
 ## add a new setting in the array to ensure it persists
 func save_settings() -> void:
 	var config: ConfigFile = ConfigFile.new()
-	for setting: String in ["fullscreen", "play_sfx", "play_music"]:
+	for setting: String in ["fullscreen", "play_sfx", "play_music", "master_volume", "music_volume", "sfx_volume"]:
 		config.set_value(CONFIG_SETTINGS_SECTION, setting, self[setting])
 	config.save(SETTINGS_FILE)
 
@@ -46,6 +49,13 @@ func set_fullscreen(val: bool) -> void:
 	else:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 
+func set_volume(bus_name: String, value: float) -> void:
+		var bus_index: int = AudioServer.get_bus_index(bus_name)
+		print('setting volume for ...', bus_name, value)
+		AudioServer.set_bus_volume_db(
+		bus_index,
+		linear_to_db(value)
+		 )
 ## Assigns the value to ths after one gets set, but can be disabled
 ## with the `save` argument.e Global setting variable.
 ## Defaults to saving all setting
@@ -58,10 +68,18 @@ func set_setting(setting: String, val: Variant, save := true) -> void:
 #			TODO: THis hsould be improved. All it does right now is mute the bus for the music or audio, but the stream is still playing
 		"play_music":
 			var idx: int = AudioServer.get_bus_index("Music")
-			AudioServer.set_bus_mute(idx, not val)
+			if idx > 0:
+				AudioServer.set_bus_mute(idx, not val)
 		"play_sfx":
 			var idx: int = AudioServer.get_bus_index("SFX")
-			AudioServer.set_bus_mute(idx, not val)
+			if idx > 0:
+				AudioServer.set_bus_mute(idx, not val)
+		"master_volume":
+			set_volume('Master', val)
+		"music_volume":
+			set_volume('Music', val)
+		"sfx_volume":
+			set_volume('SFX', val)
 	if save:
 		save_settings()
 

@@ -1,6 +1,8 @@
 extends Control
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var pause_menu: Control = $"."
+@onready var settings_menu: Control = %SettingsMenu
+
 
 func _ready() -> void:
 	pause_menu.visible = false
@@ -38,3 +40,8 @@ func _on_quit_pressed() -> void:
 
 func _process(_delta: float) -> void:
 	testEsc()
+
+
+func _on_settings_pressed() -> void:
+	settings_menu.animation_player.play('blur')
+	settings_menu.visible = true

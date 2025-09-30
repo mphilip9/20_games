@@ -1,6 +1,71 @@
-[gd_scene load_steps=2 format=3 uid="uid://ceupt74uc3cms"]
+[gd_scene load_steps=8 format=3 uid="uid://ceupt74uc3cms"]
 
 [ext_resource type="Script" uid="uid://b78q1qwqqi0y7" path="res://scene_manager/settings/settings_menu.gd" id="1_eh180"]
+[ext_resource type="Shader" uid="uid://eaifvnliebm0" path="res://scene_manager/Menus/pause_menu.gdshader" id="2_xbda6"]
+[ext_resource type="PackedScene" uid="uid://dt5nkgvsx5hdo" path="res://scene_manager/settings/volume_slider.tscn" id="3_6ntjm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ntjm"]
+shader = ExtResource("2_xbda6")
+shader_parameter/lod = 0.0
+
+[sub_resource type="Animation" id="Animation_0yh55"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:material:shader_parameter/lod")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.15, 0, 0.15, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PanelContainer:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_iilpo"]
+resource_name = "blur"
+length = 0.3
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:material:shader_parameter/lod")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.15, 0, 0.15, 0, 0.8, -0.15, 0, 0.15, 0),
+"times": PackedFloat32Array(0, 0.3)
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PanelContainer:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0yh55"]
+_data = {
+&"RESET": SubResource("Animation_0yh55"),
+&"blur": SubResource("Animation_iilpo")
+}
 
 [node name="SettingsMenu" type="Control"]
 process_mode = 3
@@ -11,6 +76,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_eh180")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_6ntjm")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1
@@ -24,6 +98,7 @@ grow_horizontal = 2
 text = "Settings"
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -57,3 +132,41 @@ text = "Sound Effects"
 unique_name_in_owner = true
 layout_mode = 2
 text = "Fullscreen"
+
+[node name="MasterLabel" type="Label" parent="PanelContainer/SettingsVBoxContainer"]
+layout_mode = 2
+text = "Master Volume"
+horizontal_alignment = 1
+
+[node name="Master" parent="PanelContainer/SettingsVBoxContainer" instance=ExtResource("3_6ntjm")]
+layout_mode = 2
+bus_name = "Master"
+
+[node name="MusicLabel" type="Label" parent="PanelContainer/SettingsVBoxContainer"]
+layout_mode = 2
+text = "Music Volume"
+horizontal_alignment = 1
+
+[node name="Music" parent="PanelContainer/SettingsVBoxContainer" instance=ExtResource("3_6ntjm")]
+layout_mode = 2
+bus_name = "Music"
+
+[node name="SFXLabel" type="Label" parent="PanelContainer/SettingsVBoxContainer"]
+layout_mode = 2
+text = "SFX Volume"
+horizontal_alignment = 1
+
+[node name="SFX" parent="PanelContainer/SettingsVBoxContainer" instance=ExtResource("3_6ntjm")]
+layout_mode = 2
+bus_name = "SFX"
+
+[node name="BackButton" type="Button" parent="PanelContainer/SettingsVBoxContainer"]
+layout_mode = 2
+text = "Back"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_0yh55")
+}
+
+[connection signal="pressed" from="PanelContainer/SettingsVBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

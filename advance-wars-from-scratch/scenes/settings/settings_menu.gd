@@ -45,3 +45,7 @@ func _on_back_button_pressed() -> void:
 	animation_player.play_backwards('blur')
 	await animation_player.animation_finished
 	hide()
+
+
+func _on_sfx_button_pressed() -> void:
+	SoundManager.play_sfx("res://assets/Bells2.mp3")

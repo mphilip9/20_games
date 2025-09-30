@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://cu25nay7kuxo0"]
 
-[ext_resource type="Script" uid="uid://dxif2unfj052p" path="res://scene_manager/Menus/loading_screen.gd" id="1_k5r6i"]
+[ext_resource type="Script" uid="uid://dxif2unfj052p" path="res://scenes/loading/loading_screen.gd" id="1_5brb8"]
 
 [sub_resource type="Animation" id="Animation_hfsfo"]
 length = 0.001
@@ -65,7 +65,7 @@ bg_color = Color(1, 0.438345, 0.484497, 1)
 [node name="LoadingScreen" type="CanvasLayer"]
 layer = 2
 follow_viewport_enabled = true
-script = ExtResource("1_k5r6i")
+script = ExtResource("1_5brb8")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 unique_name_in_owner = true

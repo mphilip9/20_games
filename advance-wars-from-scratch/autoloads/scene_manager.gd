@@ -10,7 +10,7 @@ signal _content_finished_loading(content: Node)
 signal _content_invalid(content_path:String)
 signal _content_failed_to_load(content_path:String)
 
-var _loading_screen_scene:PackedScene = preload("res://scene_manager/Menus/loading_screen.tscn")# Add link to loading scene here
+#var _loading_screen_scene:PackedScene = preload("res://scene_manager/Menus/loading_screen.tscn")# Add link to loading scene here
 var _loading_screen: LoadingScreen
 var _transition:String
 var _content_path:String
@@ -27,13 +27,12 @@ func _ready() -> void:
 
 func _add_loading_screen(transition_type:String='start_wipe_from_right') -> void:
 	_transition = "no_to_transition" if transition_type == "no_transition" else transition_type
-	print('the transition here', _transition)
-	_loading_screen = _loading_screen_scene.instantiate() as LoadingScreen #TODO: Define loading screen class
+	_loading_screen = Scenes.LOADING_SCREEN.instantiate() as LoadingScreen #TODO: Define loading screen class
 	get_tree().root.add_child(_loading_screen)
 	_loading_screen.start_transition(_transition)
 
 
-func swap_scenes(scene_to_load:String, load_into:Node=null, scene_to_unload:Node=null, transition_type:String='start_wipe_from_right') -> void:
+func swap_scenes(scene_to_load:Variant, load_into:Node=null, scene_to_unload:Node=null, transition_type:String='start_wipe_from_right') -> void:
 
 	if _loading_in_progress:
 		push_warning('SceneManager is already loading something')
@@ -45,8 +44,14 @@ func swap_scenes(scene_to_load:String, load_into:Node=null, scene_to_unload:Node
 	_scene_to_unload = scene_to_unload
 
 	_add_loading_screen(transition_type)
-	_load_content(scene_to_load)
-
+	# Handle both preloaded PackedScenes and path strings
+	if scene_to_load is PackedScene:
+		_load_preloaded_content(scene_to_load)
+	elif scene_to_load is String:
+		_load_content(scene_to_load)
+	else:
+		push_error("scene_to_load must be either PackedScene or String path")
+		_loading_in_progress = false
 func _load_content(content_path:String) -> void:
 
 	load_start.emit(_loading_screen)
@@ -68,6 +73,14 @@ func _load_content(content_path:String) -> void:
 	get_tree().root.add_child(_load_progress_timer)
 	_load_progress_timer.start()
 
+func _load_preloaded_content(packed_scene: PackedScene) -> void:
+	load_start.emit(_loading_screen)
+	# Wait for start transition animation
+	await _loading_screen.anim_player.animation_finished
+
+	# Instantly instantiate (no threading needed)
+	var incoming_scene: Node = packed_scene.instantiate()
+	_content_finished_loading.emit(incoming_scene)
 
 func _monitor_load_status() -> void:
 	var load_progress: Array = [] #What the hell is the type for this array?

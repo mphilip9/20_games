@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cxgdtho6f3375"]
 
-[ext_resource type="Script" uid="uid://bdqohaj5rpl85" path="res://scene_manager/gameplay.gd" id="1_6gcy0"]
-[ext_resource type="PackedScene" uid="uid://4ffsds0qrhy7" path="res://scene_manager/Menus/pause_menu.tscn" id="2_i8tm1"]
+[ext_resource type="Script" uid="uid://bdqohaj5rpl85" path="res://scenes/gameplay/gameplay.gd" id="1_6gcy0"]
+[ext_resource type="PackedScene" uid="uid://4ffsds0qrhy7" path="res://scenes/pause/pause_menu.tscn" id="2_i8tm1"]
 
 [node name="Gameplay" type="Node2D"]
 script = ExtResource("1_6gcy0")
@@ -39,12 +39,6 @@ layout_mode = 2
 text = "Return to Title
 "
 
-[node name="SFXButton" type="Button" parent="CanvasLayer/HUD/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Play SFX"
-
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("2_i8tm1")]
 
 [connection signal="pressed" from="CanvasLayer/HUD/VBoxContainer/ReturnButton" to="." method="_on_return_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/HUD/VBoxContainer/SFXButton" to="." method="_on_sfx_button_pressed"]

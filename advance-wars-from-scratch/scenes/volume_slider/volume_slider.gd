@@ -14,4 +14,6 @@ func _ready() -> void:
 
 func _on_value_changed(slider_value: float) -> void:
 	var volume_setting: String = bus_name + '_volume'
+#	NOTE: If you don't want this slider to affect saved global config settings, you can easily just pull that logic
+#	out of Settings Manager
 	Settings.set_setting(volume_setting.to_lower(), slider_value)

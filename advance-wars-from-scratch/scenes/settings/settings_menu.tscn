@@ -1,11 +1,11 @@
 [gd_scene load_steps=8 format=3 uid="uid://ceupt74uc3cms"]
 
-[ext_resource type="Script" uid="uid://b78q1qwqqi0y7" path="res://scene_manager/settings/settings_menu.gd" id="1_eh180"]
-[ext_resource type="Shader" uid="uid://eaifvnliebm0" path="res://scene_manager/Menus/pause_menu.gdshader" id="2_xbda6"]
-[ext_resource type="PackedScene" uid="uid://dt5nkgvsx5hdo" path="res://scene_manager/settings/volume_slider.tscn" id="3_6ntjm"]
+[ext_resource type="Script" uid="uid://b78q1qwqqi0y7" path="res://scenes/settings/settings_menu.gd" id="1_itqk5"]
+[ext_resource type="Shader" uid="uid://eaifvnliebm0" path="res://scenes/pause/pause_menu.gdshader" id="2_8him4"]
+[ext_resource type="PackedScene" uid="uid://dt5nkgvsx5hdo" path="res://scenes/volume_slider/volume_slider.tscn" id="3_0jars"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6ntjm"]
-shader = ExtResource("2_xbda6")
+shader = ExtResource("2_8him4")
 shader_parameter/lod = 0.0
 
 [sub_resource type="Animation" id="Animation_0yh55"]
@@ -75,7 +75,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_eh180")
+script = ExtResource("1_itqk5")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_6ntjm")
@@ -112,61 +112,82 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SettingsVBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Contents" type="HBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="SettingsVBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/Contents"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ToggleMusic" type="CheckButton" parent="PanelContainer/SettingsVBoxContainer"]
+[node name="ToggleMusic" type="CheckButton" parent="PanelContainer/MarginContainer/Contents/SettingsVBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
 text = "Music"
 
-[node name="ToggleSFX" type="CheckButton" parent="PanelContainer/SettingsVBoxContainer"]
+[node name="ToggleSFX" type="CheckButton" parent="PanelContainer/MarginContainer/Contents/SettingsVBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
 text = "Sound Effects"
 
-[node name="Fullscreen" type="CheckButton" parent="PanelContainer/SettingsVBoxContainer"]
+[node name="Fullscreen" type="CheckButton" parent="PanelContainer/MarginContainer/Contents/SettingsVBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Fullscreen"
 
-[node name="MasterLabel" type="Label" parent="PanelContainer/SettingsVBoxContainer"]
+[node name="MasterLabel" type="Label" parent="PanelContainer/MarginContainer/Contents/SettingsVBoxContainer"]
 layout_mode = 2
 text = "Master Volume"
 horizontal_alignment = 1
 
-[node name="Master" parent="PanelContainer/SettingsVBoxContainer" instance=ExtResource("3_6ntjm")]
+[node name="Master" parent="PanelContainer/MarginContainer/Contents/SettingsVBoxContainer" instance=ExtResource("3_0jars")]
 layout_mode = 2
 bus_name = "Master"
 
-[node name="MusicLabel" type="Label" parent="PanelContainer/SettingsVBoxContainer"]
+[node name="MusicLabel" type="Label" parent="PanelContainer/MarginContainer/Contents/SettingsVBoxContainer"]
 layout_mode = 2
 text = "Music Volume"
 horizontal_alignment = 1
 
-[node name="Music" parent="PanelContainer/SettingsVBoxContainer" instance=ExtResource("3_6ntjm")]
+[node name="Music" parent="PanelContainer/MarginContainer/Contents/SettingsVBoxContainer" instance=ExtResource("3_0jars")]
 layout_mode = 2
 bus_name = "Music"
 
-[node name="SFXLabel" type="Label" parent="PanelContainer/SettingsVBoxContainer"]
+[node name="SFXLabel" type="Label" parent="PanelContainer/MarginContainer/Contents/SettingsVBoxContainer"]
 layout_mode = 2
 text = "SFX Volume"
 horizontal_alignment = 1
 
-[node name="SFX" parent="PanelContainer/SettingsVBoxContainer" instance=ExtResource("3_6ntjm")]
+[node name="SFX" parent="PanelContainer/MarginContainer/Contents/SettingsVBoxContainer" instance=ExtResource("3_0jars")]
 layout_mode = 2
 bus_name = "SFX"
 
-[node name="BackButton" type="Button" parent="PanelContainer/SettingsVBoxContainer"]
+[node name="BackButton" type="Button" parent="PanelContainer/MarginContainer/Contents/SettingsVBoxContainer"]
 layout_mode = 2
 text = "Back"
+
+[node name="Panel" type="MarginContainer" parent="PanelContainer/MarginContainer/Contents"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="SFXButton" type="Button" parent="PanelContainer/MarginContainer/Contents/Panel"]
+layout_mode = 2
+text = "Test Sound Effect"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_0yh55")
 }
 
-[connection signal="pressed" from="PanelContainer/SettingsVBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/Contents/SettingsVBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/Contents/Panel/SFXButton" to="." method="_on_sfx_button_pressed"]

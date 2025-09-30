@@ -51,15 +51,14 @@ func set_fullscreen(val: bool) -> void:
 
 func set_volume(bus_name: String, value: float) -> void:
 		var bus_index: int = AudioServer.get_bus_index(bus_name)
-		print('setting volume for ...', bus_name, value)
 		AudioServer.set_bus_volume_db(
-		bus_index,
-		linear_to_db(value)
+			bus_index,
+			linear_to_db(value)
 		 )
+
 ## Assigns the value to ths after one gets set, but can be disabled
 ## with the `save` argument.e Global setting variable.
-## Defaults to saving all setting
-
+## Defaults to saving all settings
 func set_setting(setting: String, val: Variant, save := true) -> void:
 	self[setting] = val
 	match setting:

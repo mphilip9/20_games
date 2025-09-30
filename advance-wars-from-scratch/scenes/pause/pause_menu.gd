@@ -36,7 +36,8 @@ func _on_resume_pressed() -> void:
 
 func _on_quit_pressed() -> void:
 	get_tree().paused = false
-	SceneManager.swap_scenes("res://scene_manager/Menus/start_screen.tscn", get_tree().root, get_parent(), "start_wipe_from_right")
+	SoundManager.stop_music()
+	SceneManager.swap_scenes(Scenes.START_SCREEN, get_tree().root, get_parent(), "start_wipe_from_right")
 
 func _process(_delta: float) -> void:
 	testEsc()
